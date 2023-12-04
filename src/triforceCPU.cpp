@@ -71,13 +71,13 @@ static GLuint sVAO = 0;
  */
 bool initShaderProgram() {
     GLuint vertexShader, fragmentShader;
-    if (!(createShaderFromString(vertexShader, GL_VERTEX_SHADER, kVertexShaderStr) &&
-          createShaderFromString(fragmentShader, GL_FRAGMENT_SHADER, kFragmentShaderStr))) {
+    if (!(utils::createShaderFromString(vertexShader, GL_VERTEX_SHADER, kVertexShaderStr) &&
+          utils::createShaderFromString(fragmentShader, GL_FRAGMENT_SHADER, kFragmentShaderStr))) {
         return false;
     }
     GLuint shaders[2] = {vertexShader, fragmentShader};
 
-    if (!createProgram(sGLProgram, shaders, 2)) {
+    if (!utils::createProgram(sGLProgram, shaders, 2)) {
         return false;
     }
     glDeleteShader(vertexShader);
@@ -191,7 +191,7 @@ void terminate(GLFWwindow *window) {
 }
 
 int main() {
-    GLFWwindow *window = initGLFW("Triforce CPU");
+    GLFWwindow *window = utils::initGLFW("Triforce CPU");
     glfwSetWindowSizeCallback(window, resizeCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowCloseCallback(window, windowCloseCallback);
