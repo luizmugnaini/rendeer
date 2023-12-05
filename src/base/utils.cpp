@@ -190,6 +190,33 @@ namespace utils {
         fprintf(stderr, "GLFW error %d: %s\n", error, desc);
     }
 
+    void keyCallbackGLFW(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+    }
+
+    void resizeCallbackGLFW(GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+    }
+
+    void windowCloseCallbackGLFW(GLFWwindow* window) {
+        fprintf(stderr, "Closing window...\n");
+        glfwDestroyWindow(window);
+    }
+
+    void setGLFWCallbacks(GLFWwindow* window, const int flags) {
+        if (flags & KEY_CALLBACK) {
+            glfwSetKeyCallback(window, keyCallbackGLFW);
+        }
+        if (flags & RESIZE_CALLBACK) {
+            glfwSetWindowSizeCallback(window, resizeCallbackGLFW);
+        }
+        if (flags & WINDOW_CLOSE_CALLBACK) {
+            glfwSetWindowCloseCallback(window, windowCloseCallbackGLFW);
+        }
+    }
+
     GLFWwindow* initGLFW(const char* windowName) {
         if (!windowName) {
             fprintf(stderr, "initGLFW() requires a window name argument.\n");
@@ -198,7 +225,6 @@ namespace utils {
 
         printf("Initializing GLFW and creating window...\n");
         glfwSetErrorCallback(errorCallbackGLFW);
-
         if (glfwInit() == GLFW_FALSE) {
             fprintf(stderr, "GLFW failed to initialize...\n");
             exit(-1);

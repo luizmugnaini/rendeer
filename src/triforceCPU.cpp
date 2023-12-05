@@ -157,22 +157,6 @@ void renderScene() {
 }
 
 /**
- * @brief If the use presses the escape key, the GLFW window is issued to close.
- */
-void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
-
-/**
- * @brief Makes a viewport transformation whenever the GLFW window is resized.
- */
-void resizeCallback(GLFWwindow *window, int width, int height) {
-    glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
-}
-
-/**
  * @brief Clean up the OpenGL objects when closing the window, and destroy the
  *        window.
  */
@@ -181,6 +165,7 @@ void windowCloseCallback(GLFWwindow *window) {
     glDeleteProgram(sGLProgram);
     glDeleteBuffers(1, &sVBO);
     glDeleteVertexArrays(1, &sVAO);
+
     printf("Closing window...\n");
     glfwDestroyWindow(window);
 }
@@ -192,9 +177,8 @@ void terminate(GLFWwindow *window) {
 
 int main() {
     GLFWwindow *window = utils::initGLFW("Triforce CPU");
-    glfwSetWindowSizeCallback(window, resizeCallback);
-    glfwSetKeyCallback(window, keyCallback);
-    glfwSetWindowCloseCallback(window, windowCloseCallback);
+    utils::setGLFWCallbacks(
+        window, utils::KEY_CALLBACK | utils::RESIZE_CALLBACK | utils::WINDOW_CLOSE_CALLBACK);
     glfwSwapInterval(1);
 
     if (!initShaderProgram()) {
@@ -217,10 +201,8 @@ int main() {
             printf("FPS: %d\n", fps);
             fps = 0;
         }
-
         glfwPollEvents();
     }
-
     glfwTerminate();
     return 0;
 }

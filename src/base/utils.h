@@ -6,12 +6,19 @@
 #include <glad/gl.h>
 
 #define PI 3.14159F
+#define Bit(x) (1 << x)
 
 namespace utils {
     // GLFW window width.
     static const int kWindowWidth = 800;
     // GLFW window height.
     static const int kWindowHeight = 800;
+
+    enum CallbackOptions {
+        KEY_CALLBACK = Bit(0),
+        RESIZE_CALLBACK = Bit(1),
+        WINDOW_CLOSE_CALLBACK = Bit(2),
+    };
 
     /**
      * @brief Reads the content from a file and writes it to a buffer.
@@ -78,6 +85,22 @@ namespace utils {
 
     /** @brief Report GLFW errors. */
     void errorCallbackGLFW(int error, const char* desc);
+
+    /**
+     * @brief If the use presses the escape key, the GLFW window is issued to close.
+     */
+    void keyCallbackGLFW(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+    /** @brief Makes a viewport transformation whenever the GLFW window is resized. */
+    void resizeCallbackGLFW(GLFWwindow* window, int width, int height);
+
+    /** @brief Clean up the OpenGL objects when closing the window, and destroy the window. */
+    void windowCloseCallbackGLFW(GLFWwindow* window);
+
+    /**
+     * @brief Sets
+     */
+    void setGLFWCallbacks(GLFWwindow* window, int flags);
 
     /**
      * @brief Initialize GLFW.

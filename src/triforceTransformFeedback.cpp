@@ -122,6 +122,7 @@ bool initShaderProgram() {
 
     if (!(utils::findAttribLocation(sGLProgram, sModeUniformLoc, "mode", true) &&
           utils::findAttribLocation(sGLProgram, sInPosAttribLoc, "inPos", false))) {
+        fprintf(stderr, "Unable to find attribute location.\n");
         return false;
     }
     glDeleteShader(vertexShader);
@@ -190,44 +191,23 @@ void terminateRenderer() {
     glDeleteProgram(sGLProgram);
 }
 
-/**
- * @brief If the use presses the escape key, the GLFW window is issued to close.
- */
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
-
-/** @brief Makes a viewport transformation whenever the GLFW window is resized. */
-void resizeCallback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
-}
-
-/** @brief Clean up the OpenGL objects when closing the window, and destroy the window. */
-void windowCloseCallback(GLFWwindow* window) {
-    fprintf(stderr, "Closing window...\n");
-    glfwDestroyWindow(window);
-}
-
 void terminate(GLFWwindow* window) {
-    windowCloseCallback(window);
+    utils::windowCloseCallbackGLFW(window);
     terminateRenderer();
     glfwTerminate();
 }
 
 int main() {
     GLFWwindow* window = utils::initGLFW("Triforce Transform Feedback");
-    glfwSetWindowSizeCallback(window, resizeCallback);
-    glfwSetKeyCallback(window, keyCallback);
-    glfwSetWindowCloseCallback(window, windowCloseCallback);
+    utils::setGLFWCallbacks(
+        window, utils::KEY_CALLBACK | utils::RESIZE_CALLBACK | utils::WINDOW_CLOSE_CALLBACK);
     glfwSwapInterval(1);
 
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(utils::errorCallbackGL, 0);
 
     if (!initShaderProgram()) {
-        windowCloseCallback(window);
+        utils::windowCloseCallbackGLFW(window);
         terminateRenderer();
         glfwTerminate();
         terminate(window);
