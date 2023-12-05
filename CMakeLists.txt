@@ -104,3 +104,8 @@ add_executable(triforceTransformFeedback "src/triforceTransformFeedback.cpp")
 target_compile_options(triforceTransformFeedback PRIVATE ${GP_CXX_FLAGS} ${GP_SAN_CXX_FLAGS})
 set_target_properties(triforceTransformFeedback PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "triforceTransformFeedback")
 target_link_libraries(triforceTransformFeedback PRIVATE ${GP_SAN_CXX_FLAGS} glfw glad base)
+
+add_executable(rectangle3D "src/rectangle3D.cpp")
+target_compile_options(rectangle3D PRIVATE ${GP_CXX_FLAGS} ${GP_SAN_CXX_FLAGS})
+set_target_properties(rectangle3D PROPERTIES CXX_STANDARD 17 OUTPUT_NAME "rectangle3D")
+target_link_libraries(rectangle3D PRIVATE ${GP_SAN_CXX_FLAGS} glfw glad base)
